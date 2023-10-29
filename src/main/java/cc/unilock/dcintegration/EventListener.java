@@ -7,7 +7,6 @@ import cpw.mods.fml.common.gameevent.PlayerEvent;
 import dcshadow.dev.vankka.mcdiscordreserializer.discord.DiscordSerializer;
 import dcshadow.net.kyori.adventure.text.Component;
 import dcshadow.net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import de.erdbeerbaerlp.dcintegration.common.DiscordIntegration;
 import de.erdbeerbaerlp.dcintegration.common.WorkThread;
 import de.erdbeerbaerlp.dcintegration.common.storage.Configuration;
 import de.erdbeerbaerlp.dcintegration.common.storage.Localization;
@@ -26,7 +25,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.stats.Achievement;
 import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.event.CommandEvent;
@@ -105,8 +103,8 @@ public class EventListener {
                                 .replace("%name%", ForgeMessageUtils.formatPlayerName(player))
                                 .replace("%randomUUID%", UUID.randomUUID().toString())
                                 .replace("%avatarURL%", avatarURL)
-                                .replace("%advName%", EnumChatFormatting.getTextWithoutFormattingCodes(StatCollector.translateToLocal(achievement.statId)))
-                                .replace("%advDesc%", EnumChatFormatting.getTextWithoutFormattingCodes(achievement.statId.equals("achievement.openInventory") ? StatCollector.translateToLocal(achievement.statId + ".desc").replace("%1$s", "E") : StatCollector.translateToLocal(achievement.statId + ".desc")))
+                                .replace("%advName%", ForgeMessageUtils.getTextWithoutFormattingCodes(StatCollector.translateToLocal(achievement.statId)))
+                                .replace("%advDesc%", ForgeMessageUtils.getTextWithoutFormattingCodes(achievement.statId.equals("achievement.openInventory") ? StatCollector.translateToLocal(achievement.statId + ".desc").replace("%1$s", "E") : StatCollector.translateToLocal(achievement.statId + ".desc")))
                                 .replace("%avatarURL%", avatarURL)
                                 .replace("%playerColor%", "" + TextColors.generateFromUUID(player.getUniqueID()).getRGB())
                             );
@@ -115,14 +113,14 @@ public class EventListener {
                             EmbedBuilder b = Configuration.instance().embedMode.advancementMessage.toEmbed();
                             b = b.setAuthor(ForgeMessageUtils.formatPlayerName(ev.entity), null, avatarURL)
                                 .setDescription(Localization.instance().advancementMessage.replace("%player%", ForgeMessageUtils.formatPlayerName(ev.entity))
-                                    .replace("%advName%", EnumChatFormatting.getTextWithoutFormattingCodes(StatCollector.translateToLocal(achievement.statId)))
-                                    .replace("%advDesc%", EnumChatFormatting.getTextWithoutFormattingCodes(achievement.statId.equals("achievement.openInventory") ? StatCollector.translateToLocal(achievement.statId + ".desc").replace("%1$s", "E") : StatCollector.translateToLocal(achievement.statId + ".desc")))
+                                    .replace("%advName%", ForgeMessageUtils.getTextWithoutFormattingCodes(StatCollector.translateToLocal(achievement.statId)))
+                                    .replace("%advDesc%", ForgeMessageUtils.getTextWithoutFormattingCodes(achievement.statId.equals("achievement.openInventory") ? StatCollector.translateToLocal(achievement.statId + ".desc").replace("%1$s", "E") : StatCollector.translateToLocal(achievement.statId + ".desc")))
                                     .replace("\\n", "\n"));
                             INSTANCE.sendMessage(new DiscordMessage(b.build()));
                         }
-                    } else INSTANCE.sendMessage(Localization.instance().advancementMessage.replace("%player%", EnumChatFormatting.getTextWithoutFormattingCodes(ForgeMessageUtils.formatPlayerName(player)))
-                        .replace("%advName%", EnumChatFormatting.getTextWithoutFormattingCodes(StatCollector.translateToLocal(achievement.statId)))
-                        .replace("%advDesc%", EnumChatFormatting.getTextWithoutFormattingCodes(achievement.statId.equals("achievement.openInventory") ? StatCollector.translateToLocal(achievement.statId + ".desc").replace("%1$s", "E") : StatCollector.translateToLocal(achievement.statId + ".desc")))
+                    } else INSTANCE.sendMessage(Localization.instance().advancementMessage.replace("%player%", ForgeMessageUtils.getTextWithoutFormattingCodes(ForgeMessageUtils.formatPlayerName(player)))
+                        .replace("%advName%", ForgeMessageUtils.getTextWithoutFormattingCodes(StatCollector.translateToLocal(achievement.statId)))
+                        .replace("%advDesc%", ForgeMessageUtils.getTextWithoutFormattingCodes(achievement.statId.equals("achievement.openInventory") ? StatCollector.translateToLocal(achievement.statId + ".desc").replace("%1$s", "E") : StatCollector.translateToLocal(achievement.statId + ".desc")))
                         .replace("\\n", "\n"));
                 }
     }
@@ -339,7 +337,7 @@ public class EventListener {
                             .replace("%name%", ForgeMessageUtils.formatPlayerName(player))
                             .replace("%randomUUID%", UUID.randomUUID().toString())
                             .replace("%avatarURL%", avatarURL)
-                            .replace("%deathMessage%", EnumChatFormatting.getTextWithoutFormattingCodes(deathMessage.getUnformattedTextForChat()).replace(ForgeMessageUtils.formatPlayerName(player) + " ", ""))
+                            .replace("%deathMessage%", ForgeMessageUtils.getTextWithoutFormattingCodes(deathMessage.getUnformattedTextForChat()).replace(ForgeMessageUtils.formatPlayerName(player) + " ", ""))
                             .replace("%playerColor%", "" + TextColors.generateFromUUID(player.getUniqueID()).getRGB())
                         );
                         if (embed != null) {
@@ -349,7 +347,7 @@ public class EventListener {
                         INSTANCE.sendMessage(new DiscordMessage(b.build()));
                     } else {
                         final EmbedBuilder b = Configuration.instance().embedMode.deathMessage.toEmbed();
-                        b.setDescription(":skull: " + Localization.instance().playerDeath.replace("%player%", ForgeMessageUtils.formatPlayerName(player)).replace("%msg%", EnumChatFormatting.getTextWithoutFormattingCodes(deathMessage.getUnformattedTextForChat()).replace(ForgeMessageUtils.formatPlayerName(player) + " ", "")));
+                        b.setDescription(":skull: " + Localization.instance().playerDeath.replace("%player%", ForgeMessageUtils.formatPlayerName(player)).replace("%msg%", ForgeMessageUtils.getTextWithoutFormattingCodes(deathMessage.getUnformattedTextForChat()).replace(ForgeMessageUtils.formatPlayerName(player) + " ", "")));
                         if (embed != null) {
                             b.addBlankField(false);
                             b.addField(embed.getTitle() + " *(" + embed.getFooter().getText() + ")*", embed.getDescription(), false);
@@ -357,7 +355,7 @@ public class EventListener {
                         INSTANCE.sendMessage(new DiscordMessage(b.build()), INSTANCE.getChannel(Configuration.instance().advanced.deathsChannelID));
                     }
                 } else
-                    INSTANCE.sendMessage(new DiscordMessage(embed, Localization.instance().playerDeath.replace("%player%", ForgeMessageUtils.formatPlayerName(player)).replace("%msg%", EnumChatFormatting.getTextWithoutFormattingCodes(deathMessage.getUnformattedTextForChat()).replace(ForgeMessageUtils.formatPlayerName(player) + " ", ""))), INSTANCE.getChannel(Configuration.instance().advanced.deathsChannelID));
+                    INSTANCE.sendMessage(new DiscordMessage(embed, Localization.instance().playerDeath.replace("%player%", ForgeMessageUtils.formatPlayerName(player)).replace("%msg%", ForgeMessageUtils.getTextWithoutFormattingCodes(deathMessage.getUnformattedTextForChat()).replace(ForgeMessageUtils.formatPlayerName(player) + " ", ""))), INSTANCE.getChannel(Configuration.instance().advanced.deathsChannelID));
             }
         }
     }

@@ -1,11 +1,13 @@
 package cc.unilock.dcintegration.proxy;
 
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartedEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.event.FMLServerStoppingEvent;
+import cpw.mods.fml.common.event.*;
 
 public class ClientProxy implements IProxy {
+    @Override
+    public void modConstruction(FMLConstructionEvent event) {
+        throw new RuntimeException("DCIntegration cannot run client-side");
+    }
+
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         throw new RuntimeException("DCIntegration cannot run client-side");

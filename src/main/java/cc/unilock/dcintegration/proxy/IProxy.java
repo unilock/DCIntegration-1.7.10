@@ -1,11 +1,10 @@
 package cc.unilock.dcintegration.proxy;
 
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartedEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.event.FMLServerStoppingEvent;
+import cpw.mods.fml.common.event.*;
 
 public interface IProxy {
+    void modConstruction(FMLConstructionEvent event);
+
     void preInit(FMLPreInitializationEvent event);
 
     void serverStarting(FMLServerStartingEvent event);

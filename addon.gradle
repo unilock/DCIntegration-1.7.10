@@ -1,0 +1,6 @@
+shadowJar {
+    exclude(
+        'module-info.class',
+        'META-INF/versions/9/module-info.class'
+    )
+}

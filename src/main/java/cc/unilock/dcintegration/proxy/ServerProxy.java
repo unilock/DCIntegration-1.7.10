@@ -4,10 +4,7 @@ import cc.unilock.dcintegration.DiscordIntegrationMod;
 import cc.unilock.dcintegration.EventListener;
 import cc.unilock.dcintegration.util.ForgeServerInterface;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartedEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.event.FMLServerStoppingEvent;
+import cpw.mods.fml.common.event.*;
 import de.erdbeerbaerlp.dcintegration.common.DiscordIntegration;
 import de.erdbeerbaerlp.dcintegration.common.storage.CommandRegistry;
 import de.erdbeerbaerlp.dcintegration.common.storage.Configuration;
@@ -24,7 +21,7 @@ import static de.erdbeerbaerlp.dcintegration.common.DiscordIntegration.*;
 
 public class ServerProxy implements IProxy {
     @Override
-    public void preInit(FMLPreInitializationEvent event) {
+    public void modConstruction(FMLConstructionEvent event) {
         try {
             if (!discordDataDir.exists()) discordDataDir.mkdir();
             DiscordIntegration.loadConfigs();
@@ -47,7 +44,7 @@ public class ServerProxy implements IProxy {
     }
 
     @Override
-    public void serverStarting(FMLServerStartingEvent event) {
+    public void preInit(FMLPreInitializationEvent event) {
         INSTANCE = new DiscordIntegration(new ForgeServerInterface());
         try {
             //Wait a short time to allow JDA to get initialized
@@ -69,8 +66,14 @@ public class ServerProxy implements IProxy {
                         DiscordIntegration.startingMsg = INSTANCE.sendMessageReturns(m, INSTANCE.getChannel(Configuration.instance().advanced.serverChannelID));
                     }
             }
-        } catch (InterruptedException | NullPointerException ignored) {
+        } catch (InterruptedException | NullPointerException e) {
+            throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void serverStarting(FMLServerStartingEvent event) {
+        // no-op?
     }
 
     @Override

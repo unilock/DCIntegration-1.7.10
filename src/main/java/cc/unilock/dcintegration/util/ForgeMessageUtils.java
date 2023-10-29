@@ -3,21 +3,22 @@ package cc.unilock.dcintegration.util;
 import dcshadow.org.apache.commons.collections4.keyvalue.DefaultMapEntry;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 public class ForgeMessageUtils {
     //private static final FMLControlledNamespacedRegistry<Item> itemreg = GameData.getItemRegistry();
+    private static final Pattern formattingCodePattern = Pattern.compile("(?i)" + '§' + "[0-9A-FK-OR]");
 
     public static String formatPlayerName(Map.Entry<UUID, String> p) {
         return formatPlayerName(p, true);
     }
 
     public static String formatPlayerName(Map.Entry<UUID, String> p, boolean chatFormat) {
-        return EnumChatFormatting.getTextWithoutFormattingCodes(p.getValue());
+        return ForgeMessageUtils.getTextWithoutFormattingCodes(p.getValue());
     }
 
     /**
@@ -34,5 +35,9 @@ public class ForgeMessageUtils {
     public static String formatPlayerName(Entity p) {
         final Map.Entry<UUID, String> e = new DefaultMapEntry<>(p.getUniqueID(), p.getCommandSenderName());
         return formatPlayerName(e);
+    }
+
+    public static String getTextWithoutFormattingCodes(String text) {
+        return text == null ? null : formattingCodePattern.matcher(text).replaceAll("");
     }
 }
