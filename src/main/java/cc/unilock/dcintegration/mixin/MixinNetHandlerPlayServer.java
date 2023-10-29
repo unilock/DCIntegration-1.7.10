@@ -20,7 +20,7 @@ public class MixinNetHandlerPlayServer {
     public EntityPlayerMP playerEntity;
 
     @Inject(method = "Lnet/minecraft/network/NetHandlerPlayServer;onDisconnect(Lnet/minecraft/util/IChatComponent;)V", at = @At("HEAD"))
-    private void onDisconnect(final IChatComponent reason, CallbackInfo ci) {
+    private void onDisconnect(IChatComponent reason, CallbackInfo ci) {
         if (reason.equals(new ChatComponentTranslation("disconnect.timeout")))
             DiscordIntegrationMod.timeouts.add(this.playerEntity.getUniqueID());
     }

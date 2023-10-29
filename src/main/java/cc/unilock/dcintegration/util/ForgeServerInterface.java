@@ -12,7 +12,6 @@ import dcshadow.net.kyori.adventure.text.format.Style;
 import dcshadow.net.kyori.adventure.text.format.TextColor;
 import dcshadow.net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import dcshadow.net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import de.erdbeerbaerlp.dcintegration.common.DiscordIntegration;
 import de.erdbeerbaerlp.dcintegration.common.storage.Configuration;
 import de.erdbeerbaerlp.dcintegration.common.storage.Localization;
 import de.erdbeerbaerlp.dcintegration.common.storage.linking.LinkManager;

@@ -1,7 +1,8 @@
 package cc.unilock.dcintegration.proxy;
 
 import cc.unilock.dcintegration.DiscordIntegrationMod;
-import cc.unilock.dcintegration.EventListener;
+import cc.unilock.dcintegration.FMLEventListener;
+import cc.unilock.dcintegration.MFEventListener;
 import cc.unilock.dcintegration.util.ForgeServerInterface;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.*;
@@ -28,7 +29,8 @@ public class ServerProxy implements IProxy {
             if (Configuration.instance().general.botToken.equals("INSERT BOT TOKEN HERE")) { // Prevent events when token not set
                 LOGGER.error("Please check the config file and set an bot token");
             } else {
-                MinecraftForge.EVENT_BUS.register(new EventListener());
+                FMLCommonHandler.instance().bus().register(new FMLEventListener());
+                MinecraftForge.EVENT_BUS.register(new MFEventListener());
             }
         } catch (IOException e) {
             LOGGER.error("Config loading failed");
