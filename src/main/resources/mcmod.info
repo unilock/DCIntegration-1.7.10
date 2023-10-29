@@ -3,12 +3,15 @@
 	"modList": [{
 		"modid": "${modId}",
 		"name": "${modName}",
-		"description": "An example mod for Minecraft 1.7.10 with Forge focused on a stable setup.",
+		"description": "This mod links your server chat with a channel on your discord server.\n",
 		"version": "${modVersion}",
 		"mcversion": "${minecraftVersion}",
-		"url": "https://github.com/SinTh0r4s/MyMod",
+		"url": "https://github.com/unilock/DCIntegration-1.7.10",
 		"updateUrl": "",
-		"authorList": ["SinTho0r4s"],
+		"authorList": [
+      "ErdbeerbaerLP",
+      "unilock"
+    ],
 		"credits": "",
 		"logoFile": "",
 		"screenshots": [],
