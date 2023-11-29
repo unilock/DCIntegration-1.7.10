@@ -1,6 +1,7 @@
 package cc.unilock.dcintegration;
 
 import cc.unilock.dcintegration.api.ForgeDiscordEventHandler;
+import cc.unilock.dcintegration.util.AchievementUtils;
 import cc.unilock.dcintegration.util.ForgeMessageUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import dcshadow.dev.vankka.mcdiscordreserializer.discord.DiscordSerializer;
@@ -21,7 +22,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.stats.Achievement;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IChatComponent;
-import net.minecraft.util.StatCollector;
 import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -53,8 +53,8 @@ public class MFEventListener {
                                 .replace("%name%", ForgeMessageUtils.formatPlayerName(player))
                                 .replace("%randomUUID%", UUID.randomUUID().toString())
                                 .replace("%avatarURL%", avatarURL)
-                                .replace("%advName%", ForgeMessageUtils.getTextWithoutFormattingCodes(StatCollector.translateToLocal(achievement.statId)))
-                                .replace("%advDesc%", ForgeMessageUtils.getTextWithoutFormattingCodes(achievement.statId.equals("achievement.openInventory") ? StatCollector.translateToLocal(achievement.statId + ".desc").replace("%1$s", "E") : StatCollector.translateToLocal(achievement.statId + ".desc")))
+                                .replace("%advName%", AchievementUtils.getAdvName(achievement))
+                                .replace("%advDesc%", AchievementUtils.getAdvDesc(achievement))
                                 .replace("%avatarURL%", avatarURL)
                                 .replace("%playerColor%", "" + TextColors.generateFromUUID(player.getUniqueID()).getRGB())
                             );
@@ -63,14 +63,14 @@ public class MFEventListener {
                             EmbedBuilder b = Configuration.instance().embedMode.advancementMessage.toEmbed();
                             b = b.setAuthor(ForgeMessageUtils.formatPlayerName(ev.entity), null, avatarURL)
                                 .setDescription(Localization.instance().advancementMessage.replace("%player%", ForgeMessageUtils.formatPlayerName(ev.entity))
-                                    .replace("%advName%", ForgeMessageUtils.getTextWithoutFormattingCodes(StatCollector.translateToLocal(achievement.statId)))
-                                    .replace("%advDesc%", ForgeMessageUtils.getTextWithoutFormattingCodes(achievement.statId.equals("achievement.openInventory") ? StatCollector.translateToLocal(achievement.statId + ".desc").replace("%1$s", "E") : StatCollector.translateToLocal(achievement.statId + ".desc")))
+                                    .replace("%advName%", AchievementUtils.getAdvName(achievement))
+                                    .replace("%advDesc%", AchievementUtils.getAdvDesc(achievement))
                                     .replace("\\n", "\n"));
                             INSTANCE.sendMessage(new DiscordMessage(b.build()));
                         }
                     } else INSTANCE.sendMessage(Localization.instance().advancementMessage.replace("%player%", ForgeMessageUtils.getTextWithoutFormattingCodes(ForgeMessageUtils.formatPlayerName(player)))
-                        .replace("%advName%", ForgeMessageUtils.getTextWithoutFormattingCodes(StatCollector.translateToLocal(achievement.statId)))
-                        .replace("%advDesc%", ForgeMessageUtils.getTextWithoutFormattingCodes(achievement.statId.equals("achievement.openInventory") ? StatCollector.translateToLocal(achievement.statId + ".desc").replace("%1$s", "E") : StatCollector.translateToLocal(achievement.statId + ".desc")))
+                        .replace("%advName%", AchievementUtils.getAdvName(achievement))
+                        .replace("%advDesc%", AchievementUtils.getAdvDesc(achievement))
                         .replace("\\n", "\n"));
                 }
     }
