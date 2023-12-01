@@ -61,8 +61,8 @@ public class MFEventListener {
                             INSTANCE.sendMessage(new DiscordMessage(b.build()));
                         } else {
                             EmbedBuilder b = Configuration.instance().embedMode.advancementMessage.toEmbed();
-                            b = b.setAuthor(ForgeMessageUtils.formatPlayerName(ev.entity), null, avatarURL)
-                                .setDescription(Localization.instance().advancementMessage.replace("%player%", ForgeMessageUtils.formatPlayerName(ev.entity))
+                            b = b.setAuthor(ForgeMessageUtils.formatPlayerName(ev.entityPlayer), null, avatarURL)
+                                .setDescription(Localization.instance().advancementMessage.replace("%player%", ForgeMessageUtils.formatPlayerName(ev.entityPlayer))
                                     .replace("%advName%", AchievementUtils.getAdvName(achievement))
                                     .replace("%advDesc%", AchievementUtils.getAdvDesc(achievement))
                                     .replace("\\n", "\n"));
@@ -287,7 +287,7 @@ public class MFEventListener {
                             .replace("%name%", ForgeMessageUtils.formatPlayerName(player))
                             .replace("%randomUUID%", UUID.randomUUID().toString())
                             .replace("%avatarURL%", avatarURL)
-                            .replace("%deathMessage%", ForgeMessageUtils.getTextWithoutFormattingCodes(deathMessage.getUnformattedTextForChat()).replace(ForgeMessageUtils.formatPlayerName(player) + " ", ""))
+                            .replace("%deathMessage%", ForgeMessageUtils.getTextWithoutFormattingCodes(deathMessage.getUnformattedTextForChat()).replace(ForgeMessageUtils.formatPlayerNameForGameMsg(player) + " ", ""))
                             .replace("%playerColor%", "" + TextColors.generateFromUUID(player.getUniqueID()).getRGB())
                         );
                         if (embed != null) {
@@ -297,7 +297,7 @@ public class MFEventListener {
                         INSTANCE.sendMessage(new DiscordMessage(b.build()));
                     } else {
                         final EmbedBuilder b = Configuration.instance().embedMode.deathMessage.toEmbed();
-                        b.setDescription(":skull: " + Localization.instance().playerDeath.replace("%player%", ForgeMessageUtils.formatPlayerName(player)).replace("%msg%", ForgeMessageUtils.getTextWithoutFormattingCodes(deathMessage.getUnformattedTextForChat()).replace(ForgeMessageUtils.formatPlayerName(player) + " ", "")));
+                        b.setDescription(":skull: " + Localization.instance().playerDeath.replace("%player%", ForgeMessageUtils.formatPlayerName(player)).replace("%msg%", ForgeMessageUtils.getTextWithoutFormattingCodes(deathMessage.getUnformattedTextForChat()).replace(ForgeMessageUtils.formatPlayerNameForGameMsg(player) + " ", "")));
                         if (embed != null) {
                             b.addBlankField(false);
                             b.addField(embed.getTitle() + " *(" + embed.getFooter().getText() + ")*", embed.getDescription(), false);
@@ -305,7 +305,7 @@ public class MFEventListener {
                         INSTANCE.sendMessage(new DiscordMessage(b.build()), INSTANCE.getChannel(Configuration.instance().advanced.deathsChannelID));
                     }
                 } else
-                    INSTANCE.sendMessage(new DiscordMessage(embed, Localization.instance().playerDeath.replace("%player%", ForgeMessageUtils.formatPlayerName(player)).replace("%msg%", ForgeMessageUtils.getTextWithoutFormattingCodes(deathMessage.getUnformattedTextForChat()).replace(ForgeMessageUtils.formatPlayerName(player) + " ", ""))), INSTANCE.getChannel(Configuration.instance().advanced.deathsChannelID));
+                    INSTANCE.sendMessage(new DiscordMessage(embed, Localization.instance().playerDeath.replace("%player%", ForgeMessageUtils.formatPlayerName(player)).replace("%msg%", ForgeMessageUtils.getTextWithoutFormattingCodes(deathMessage.getUnformattedTextForChat()).replace(ForgeMessageUtils.formatPlayerNameForGameMsg(player) + " ", ""))), INSTANCE.getChannel(Configuration.instance().advanced.deathsChannelID));
             }
         }
     }
