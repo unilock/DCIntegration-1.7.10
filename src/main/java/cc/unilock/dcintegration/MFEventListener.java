@@ -28,6 +28,8 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.AchievementEvent;
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 import static de.erdbeerbaerlp.dcintegration.common.DiscordIntegration.INSTANCE;
@@ -55,6 +57,8 @@ public class MFEventListener {
                                 .replace("%avatarURL%", avatarURL)
                                 .replace("%advName%", AchievementUtils.getAdvName(achievement))
                                 .replace("%advDesc%", AchievementUtils.getAdvDesc(achievement))
+                                .replace("%advNameURL%", URLEncoder.encode(AchievementUtils.getAdvName(achievement), StandardCharsets.UTF_8))
+                                .replace("%advDescURL%", URLEncoder.encode(AchievementUtils.getAdvDesc(achievement), StandardCharsets.UTF_8))
                                 .replace("%avatarURL%", avatarURL)
                                 .replace("%playerColor%", "" + TextColors.generateFromUUID(player.getUniqueID()).getRGB())
                             );
@@ -65,13 +69,17 @@ public class MFEventListener {
                                 .setDescription(Localization.instance().advancementMessage.replace("%player%", ForgeMessageUtils.formatPlayerName(ev.entityPlayer))
                                     .replace("%advName%", AchievementUtils.getAdvName(achievement))
                                     .replace("%advDesc%", AchievementUtils.getAdvDesc(achievement))
-                                    .replace("\\n", "\n"));
+                                    .replace("\\n", "\n")
+                                    .replace("%advNameURL%", URLEncoder.encode(AchievementUtils.getAdvName(achievement), StandardCharsets.UTF_8))
+                                    .replace("%advDescURL%", URLEncoder.encode(AchievementUtils.getAdvDesc(achievement), StandardCharsets.UTF_8)));
                             INSTANCE.sendMessage(new DiscordMessage(b.build()));
                         }
                     } else INSTANCE.sendMessage(Localization.instance().advancementMessage.replace("%player%", ForgeMessageUtils.getTextWithoutFormattingCodes(ForgeMessageUtils.formatPlayerName(player)))
                         .replace("%advName%", AchievementUtils.getAdvName(achievement))
                         .replace("%advDesc%", AchievementUtils.getAdvDesc(achievement))
-                        .replace("\\n", "\n"));
+                        .replace("\\n", "\n")
+                        .replace("%advNameURL%", URLEncoder.encode(AchievementUtils.getAdvName(achievement), StandardCharsets.UTF_8))
+                        .replace("%advDescURL%", URLEncoder.encode(AchievementUtils.getAdvDesc(achievement), StandardCharsets.UTF_8)));
                 }
     }
 
@@ -280,8 +288,8 @@ public class MFEventListener {
                 final MessageEmbed embed = ForgeMessageUtils.genItemStackEmbedIfAvailable(deathMessage);
                 if (Configuration.instance().embedMode.enabled && Configuration.instance().embedMode.deathMessage.asEmbed) {
                     final String avatarURL = Configuration.instance().webhook.playerAvatarURL.replace("%uuid%", player.getUniqueID().toString()).replace("%uuid_dashless%", player.getUniqueID().toString().replace("-", "")).replace("%name%", player.getCommandSenderName()).replace("%randomUUID%", UUID.randomUUID().toString());
-                    if (!Configuration.instance().embedMode.playerJoinMessage.customJSON.trim().isEmpty()) {
-                        final EmbedBuilder b = Configuration.instance().embedMode.playerJoinMessage.toEmbedJson(Configuration.instance().embedMode.playerJoinMessage.customJSON
+                    if (!Configuration.instance().embedMode.deathMessage.customJSON.trim().isEmpty()) {
+                        final EmbedBuilder b = Configuration.instance().embedMode.deathMessage.toEmbedJson(Configuration.instance().embedMode.deathMessage.customJSON
                             .replace("%uuid%", player.getUniqueID().toString())
                             .replace("%uuid_dashless%", player.getUniqueID().toString().replace("-", ""))
                             .replace("%name%", ForgeMessageUtils.formatPlayerName(player))

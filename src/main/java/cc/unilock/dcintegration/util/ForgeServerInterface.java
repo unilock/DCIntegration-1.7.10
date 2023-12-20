@@ -115,14 +115,10 @@ public class ForgeServerInterface implements McServerInterface {
     @Override
     public void runMcCommand(String cmd, CompletableFuture<InteractionHook> cmdMsg, User user) {
         final DCCommandSender s = new DCCommandSender(cmdMsg, user);
-        if (s.canCommandSenderUseCommand(4, "")) {
-            try {
-                FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager().executeCommand(s, cmd.trim());
-            } catch (CommandException e) {
-                s.addChatMessage(new ChatComponentText(e.getMessage()));
-            }
-        } else {
-            s.addChatMessage(new ChatComponentText("Sorry, but the bot has no permissions...\nAdd this into the servers ops.json:\n```json\n {\n   \"uuid\": \"" + Configuration.instance().commands.senderUUID + "\",\n   \"name\": \"DiscordFakeUser\",\n   \"level\": 4,\n   \"bypassesPlayerLimit\": false\n }\n```"));
+        try {
+            FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager().executeCommand(s, cmd.trim());
+        } catch (CommandException e) {
+            s.addChatMessage(new ChatComponentText(e.getMessage()));
         }
     }
 

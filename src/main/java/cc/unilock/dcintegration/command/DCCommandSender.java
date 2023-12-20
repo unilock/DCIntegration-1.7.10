@@ -1,26 +1,37 @@
 package cc.unilock.dcintegration.command;
 
-import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.common.FMLCommonHandler;
-import de.erdbeerbaerlp.dcintegration.common.storage.Configuration;
+import de.erdbeerbaerlp.dcintegration.common.DiscordIntegration;
 import de.erdbeerbaerlp.dcintegration.common.util.MessageUtils;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.IChatComponent;
-import net.minecraftforge.common.util.FakePlayer;
+import net.minecraft.world.World;
 
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-public class DCCommandSender extends FakePlayer {
-    private static final UUID uuid = UUID.fromString(Configuration.instance().commands.senderUUID);
+public class DCCommandSender implements ICommandSender {
     private final CompletableFuture<InteractionHook> cmdMsg;
+    private final String name;
     private CompletableFuture<Message> cmdMessage;
     final StringBuilder message = new StringBuilder();
 
+    private final MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+
     public DCCommandSender(CompletableFuture<InteractionHook> cmdMsg, User user) {
-        super(FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(0), new GameProfile(uuid, "@" + (!user.getDiscriminator().equals("0000") ? user.getAsTag() : user.getName())));
+        final Member member = DiscordIntegration.INSTANCE.getMemberById(user.getId());
+
+        if (member != null)
+            name = "@" + (!member.getUser().getDiscriminator().equals("0000") ? member.getUser().getAsTag() : member.getEffectiveName());
+        else
+            name = "@" + (!user.getDiscriminator().equals("0000") ? user.getAsTag() : user.getEffectiveName());
+
         this.cmdMsg = cmdMsg;
     }
 
@@ -30,28 +41,40 @@ public class DCCommandSender extends FakePlayer {
     }
 
     @Override
-    public void addChatComponentMessage(IChatComponent message) {
-        message.appendText(textComponentToDiscordMessage(message.createCopy())).appendText("\n");
+    public void addChatMessage(IChatComponent p_215097_) {
+        message.append(textComponentToDiscordMessage(p_215097_)).append("\n");
         if (cmdMessage == null)
             cmdMsg.thenAccept((msg) -> {
                 cmdMessage = msg.editOriginal(message.toString().trim()).submit();
             });
         else
-            cmdMessage.thenAccept((msg)->{
+            cmdMessage.thenAccept((msg) -> {
                 cmdMessage = msg.editMessage(message.toString().trim()).submit();
             });
     }
 
     @Override
-    public void addChatMessage(IChatComponent message) {
-        message.appendText(textComponentToDiscordMessage(message.createCopy())).appendText("\n");
-        if (cmdMessage == null)
-            cmdMsg.thenAccept((msg) -> {
-                cmdMessage = msg.editOriginal(message.toString().trim()).submit();
-            });
-        else
-            cmdMessage.thenAccept((msg)->{
-                cmdMessage = msg.editMessage(message.toString().trim()).submit();
-            });
+    public String getCommandSenderName() {
+        return name;
+    }
+
+    @Override
+    public IChatComponent func_145748_c_() {
+        return new ChatComponentText(name);
+    }
+
+    @Override
+    public boolean canCommandSenderUseCommand(int permissionLevel, String command) {
+        return true; // TODO
+    }
+
+    @Override
+    public ChunkCoordinates getPlayerCoordinates() {
+        return new ChunkCoordinates(0, 0, 0);
+    }
+
+    @Override
+    public World getEntityWorld() {
+        return server.worldServerForDimension(0);
     }
 }

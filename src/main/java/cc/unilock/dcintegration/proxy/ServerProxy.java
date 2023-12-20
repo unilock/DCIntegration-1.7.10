@@ -23,6 +23,8 @@ import static de.erdbeerbaerlp.dcintegration.common.DiscordIntegration.*;
 public class ServerProxy implements IProxy {
     @Override
     public void modConstruction(FMLConstructionEvent event) {
+        LOGGER.info("Version is " + VERSION);
+
         try {
             if (!discordDataDir.exists()) discordDataDir.mkdir();
             DiscordIntegration.loadConfigs();
