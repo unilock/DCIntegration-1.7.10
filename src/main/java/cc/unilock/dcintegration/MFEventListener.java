@@ -28,15 +28,15 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.AchievementEvent;
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 import static de.erdbeerbaerlp.dcintegration.common.DiscordIntegration.INSTANCE;
 
 public class MFEventListener {
     @SubscribeEvent
-    public void achievement(AchievementEvent ev) {
+    public void achievement(AchievementEvent ev) throws UnsupportedEncodingException {
         Achievement achievement = ev.achievement;
         EntityPlayerMP player = (EntityPlayerMP) ev.entityPlayer;
 
@@ -57,8 +57,8 @@ public class MFEventListener {
                                 .replace("%avatarURL%", avatarURL)
                                 .replace("%advName%", AchievementUtils.getAdvName(achievement))
                                 .replace("%advDesc%", AchievementUtils.getAdvDesc(achievement))
-                                .replace("%advNameURL%", URLEncoder.encode(AchievementUtils.getAdvName(achievement), StandardCharsets.UTF_8))
-                                .replace("%advDescURL%", URLEncoder.encode(AchievementUtils.getAdvDesc(achievement), StandardCharsets.UTF_8))
+                                .replace("%advNameURL%", URLEncoder.encode(AchievementUtils.getAdvName(achievement), "UTF-8"))
+                                .replace("%advDescURL%", URLEncoder.encode(AchievementUtils.getAdvDesc(achievement), "UTF-8"))
                                 .replace("%avatarURL%", avatarURL)
                                 .replace("%playerColor%", "" + TextColors.generateFromUUID(player.getUniqueID()).getRGB())
                             );
@@ -70,16 +70,16 @@ public class MFEventListener {
                                     .replace("%advName%", AchievementUtils.getAdvName(achievement))
                                     .replace("%advDesc%", AchievementUtils.getAdvDesc(achievement))
                                     .replace("\\n", "\n")
-                                    .replace("%advNameURL%", URLEncoder.encode(AchievementUtils.getAdvName(achievement), StandardCharsets.UTF_8))
-                                    .replace("%advDescURL%", URLEncoder.encode(AchievementUtils.getAdvDesc(achievement), StandardCharsets.UTF_8)));
+                                    .replace("%advNameURL%", URLEncoder.encode(AchievementUtils.getAdvName(achievement), "UTF-8"))
+                                    .replace("%advDescURL%", URLEncoder.encode(AchievementUtils.getAdvDesc(achievement), "UTF-8")));
                             INSTANCE.sendMessage(new DiscordMessage(b.build()));
                         }
                     } else INSTANCE.sendMessage(Localization.instance().advancementMessage.replace("%player%", ForgeMessageUtils.getTextWithoutFormattingCodes(ForgeMessageUtils.formatPlayerName(player)))
                         .replace("%advName%", AchievementUtils.getAdvName(achievement))
                         .replace("%advDesc%", AchievementUtils.getAdvDesc(achievement))
                         .replace("\\n", "\n")
-                        .replace("%advNameURL%", URLEncoder.encode(AchievementUtils.getAdvName(achievement), StandardCharsets.UTF_8))
-                        .replace("%advDescURL%", URLEncoder.encode(AchievementUtils.getAdvDesc(achievement), StandardCharsets.UTF_8)));
+                        .replace("%advNameURL%", URLEncoder.encode(AchievementUtils.getAdvName(achievement), "UTF-8"))
+                        .replace("%advDescURL%", URLEncoder.encode(AchievementUtils.getAdvDesc(achievement), "UTF-8")));
                 }
     }
 
