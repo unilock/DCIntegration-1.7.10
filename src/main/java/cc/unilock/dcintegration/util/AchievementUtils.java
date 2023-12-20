@@ -1,5 +1,6 @@
 package cc.unilock.dcintegration.util;
 
+import cc.unilock.dcintegration.mixin.MixinAchievement;
 import cc.unilock.dcintegration.mixin.MixinStatBase;
 import net.minecraft.stats.Achievement;
 import net.minecraft.util.StatCollector;
@@ -11,12 +12,10 @@ public class AchievementUtils {
 
     // TODO: may be finicky.
     public static String getAdvDesc(Achievement achievement) {
-        String statId = achievement.statId.startsWith("achievement.") ? achievement.statId : "achievement."+achievement.statId;
-
         return ForgeMessageUtils.getTextWithoutFormattingCodes(
-            statId.equals("achievement.openInventory")
-                ? StatCollector.translateToLocal(statId + ".desc").replace("%1$s", "E")
-                : StatCollector.translateToLocal(statId + ".desc")
+            achievement.statId.equals("achievement.openInventory")
+                ? StatCollector.translateToLocal(((MixinAchievement) achievement).getAchievementDescription()).replace("%1$s", "E")
+                : StatCollector.translateToLocal(((MixinAchievement) achievement).getAchievementDescription())
         );
     }
 }

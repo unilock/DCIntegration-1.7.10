@@ -8,6 +8,7 @@
   "mixins": [],
   "client": [],
   "server": [
+    "MixinAchievement",
     "MixinNetHandlerPlayServer",
     "MixinPlayerLogin",
     "MixinStatBase"
