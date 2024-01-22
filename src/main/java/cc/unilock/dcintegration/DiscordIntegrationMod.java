@@ -7,14 +7,18 @@ import cpw.mods.fml.common.event.FMLConstructionEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
-import cpw.mods.fml.common.network.NetworkCheckHandler;
-import cpw.mods.fml.relauncher.Side;
 
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.UUID;
 
-@Mod(modid = Tags.MODID, version = Tags.VERSION, name = Tags.MODNAME, acceptedMinecraftVersions = "[1.7.10]")
+@Mod(
+    modid = "dcintegration",
+    version = Tags.VERSION,
+    name = "DCIntegration",
+    acceptedMinecraftVersions = "[1.7.10]",
+    acceptableRemoteVersions = "*",
+    dependencies = "after: ChromatiCraft"
+)
 public class DiscordIntegrationMod {
     public static final ArrayList<UUID> timeouts = new ArrayList<>();
     public static boolean stopped = false;
@@ -40,10 +44,5 @@ public class DiscordIntegrationMod {
     @Mod.EventHandler
     public void serverStopping(FMLServerStoppingEvent event) {
         proxy.serverStopping(event);
-    }
-
-    @NetworkCheckHandler
-    public boolean checkModLists(Map<String,String> modList, Side side) {
-        return true;
     }
 }

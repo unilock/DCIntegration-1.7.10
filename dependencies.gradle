@@ -35,4 +35,6 @@
  */
 dependencies {
     shadowImplementation("de.erdbeerbaerlp:dcintegration.common:3.0.5-j8")
+
+    compileOnly(rfg.deobf("curse.maven:chromaticraft-235590:4721192"))
 }

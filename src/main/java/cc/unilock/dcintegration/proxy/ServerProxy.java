@@ -3,9 +3,14 @@ package cc.unilock.dcintegration.proxy;
 import cc.unilock.dcintegration.DiscordIntegrationMod;
 import cc.unilock.dcintegration.FMLEventListener;
 import cc.unilock.dcintegration.MFEventListener;
+import cc.unilock.dcintegration.compat.ModCompat;
 import cc.unilock.dcintegration.util.ForgeServerInterface;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.event.*;
+import cpw.mods.fml.common.event.FMLConstructionEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartedEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import de.erdbeerbaerlp.dcintegration.common.DiscordIntegration;
 import de.erdbeerbaerlp.dcintegration.common.storage.CommandRegistry;
 import de.erdbeerbaerlp.dcintegration.common.storage.Configuration;
@@ -33,6 +38,7 @@ public class ServerProxy implements IProxy {
             } else {
                 FMLCommonHandler.instance().bus().register(new FMLEventListener());
                 MinecraftForge.EVENT_BUS.register(new MFEventListener());
+                ModCompat.register();
             }
         } catch (IOException e) {
             LOGGER.error("Config loading failed");
