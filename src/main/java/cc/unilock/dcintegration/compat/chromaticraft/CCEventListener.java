@@ -14,10 +14,10 @@ import static de.erdbeerbaerlp.dcintegration.common.DiscordIntegration.LOGGER;
 
 public class CCEventListener {
     // TODO: configurable
-    private static final String CC_COLOR_MSG = "%player% has learned something new: \"%progressName%\"";
-    private static final String CC_DIMSTRUCT_MSG = "%player% has learned something new: \"%progressName%\"";
-    private static final String CC_FRAGMENT_MSG = "%player% has learned something new: *%progressName%*";
-    private static final String CC_PROGRESS_MSG = "%player% has learned something new: __%progressName%__";
+    private static final String CC_COLOR_MSG = "> **%player%** has learned something new: \"%progressName%\"";
+    private static final String CC_DIMSTRUCT_MSG = "> **%player%** has learned something new: \"%progressName%\"";
+    private static final String CC_FRAGMENT_MSG = "> **%player%** has learned something new: *%progressName%*";
+    private static final String CC_PROGRESS_MSG = "> **%player%** has learned something new: __%progressName%__";
 
     @SubscribeEvent
     public void onProgressionEvent(ProgressionEvent ev) {
