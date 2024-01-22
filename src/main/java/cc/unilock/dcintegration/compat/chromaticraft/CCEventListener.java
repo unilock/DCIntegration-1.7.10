@@ -48,7 +48,7 @@ public class CCEventListener {
                 ChromaResearch research = ChromaResearch.getByName(ev.researchKey);
 
                 title = research.getTitle();
-                desc = research.getShortDesc();
+                desc = "Something new to investigate";
                 template = CC_FRAGMENT_MSG;
             } else if (ev.type == ProgressionEvent.ResearchType.PROGRESS && !CC_PROGRESS_MSG.trim().isEmpty()) {
                 ProgressStage stage;
