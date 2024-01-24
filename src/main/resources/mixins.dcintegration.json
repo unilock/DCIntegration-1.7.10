@@ -11,6 +11,7 @@
     "MixinAchievement",
     "MixinNetHandlerPlayServer",
     "MixinPlayerLogin",
-    "MixinStatBase"
+    "MixinStatBase",
+    "compat.chromaticraft.MixinChromaResearchManager"
   ]
 }

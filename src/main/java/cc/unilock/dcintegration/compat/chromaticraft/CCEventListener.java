@@ -3,10 +3,12 @@ package cc.unilock.dcintegration.compat.chromaticraft;
 import Reika.ChromatiCraft.API.CrystalElementAccessor;
 import Reika.ChromatiCraft.API.Event.ProgressionEvent;
 import Reika.ChromatiCraft.Magic.Progression.ProgressStage;
+import Reika.ChromatiCraft.Magic.Progression.ResearchLevel;
 import Reika.ChromatiCraft.Registry.ChromaResearch;
 import cc.unilock.dcintegration.util.ForgeMessageUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import de.erdbeerbaerlp.dcintegration.common.storage.linking.LinkManager;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 
 import static de.erdbeerbaerlp.dcintegration.common.DiscordIntegration.INSTANCE;
@@ -18,6 +20,7 @@ public class CCEventListener {
     private static final String CC_DIMSTRUCT_MSG = "> **%player%** has learned something new: \"%progressName%\"";
     private static final String CC_FRAGMENT_MSG = "> **%player%** has learned something new: *%progressName%*";
     private static final String CC_PROGRESS_MSG = "> **%player%** has learned something new: __%progressName%__";
+    private static final String CC_LEVEL_MSG = "> **%player%** has learned something new: **%progressName%**";
 
     @SubscribeEvent
     public void onProgressionEvent(ProgressionEvent ev) {
@@ -66,6 +69,33 @@ public class CCEventListener {
                 } catch (IllegalArgumentException e) {
                     LOGGER.error("CC: Not a ProgressStage? : " + ev.researchKey);
                 }
+            }
+
+            if (title != null && desc != null && template != null) {
+                INSTANCE.sendMessage(template
+                    .replace("%player%", ForgeMessageUtils.formatPlayerName(player))
+                    .replace("%progressName%", title)
+                    .replace("%progressDesc%", desc) // NOTE: often somewhat spoilery, and isn't normally displayed in chat
+                    .replace("\\n", "\n")
+                );
+            }
+        }
+    }
+
+    public static void onProgressionLevel(EntityPlayer player, ResearchLevel level) {
+        if (INSTANCE != null) {
+            if (LinkManager.isPlayerLinked(player.getUniqueID()) && LinkManager.getLink(null, player.getUniqueID()).settings.hideFromDiscord)
+                return;
+            LinkManager.checkGlobalAPI(player.getUniqueID());
+
+            String title = null;
+            String desc = null;
+            String template = null;
+
+            if (!CC_LEVEL_MSG.trim().isEmpty()) {
+                title = level.getTitle();
+                desc = level.getShortDesc();
+                template = CC_LEVEL_MSG;
             }
 
             if (title != null && desc != null && template != null) {
